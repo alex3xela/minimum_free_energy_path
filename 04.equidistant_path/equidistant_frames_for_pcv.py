@@ -185,7 +185,7 @@ log_file.write('PROGRAM TO MAKE EQUIDISTANT THE FRAMES STARTING\n\n')
 
 # prepare template plumed input to compute rmsd and perform steered md
 write_plumed_template_rmsd()
-write_plumed_template_input(entity0, KAPPA_rmsd1,KAPPA_rmsd2)
+#write_plumed_template_input(KAPPA_rmsd1,KAPPA_rmsd2)
 
 # read input file
 #plumed_path,gromacs_path,topology_file,index_file,equidistance_nm,KAPPA_rmsd1,KAPPA_rmsd2 = read_config(config_file)
@@ -270,14 +270,14 @@ for a in range(0,len(list_frames)-2):
         
         # perform steered md for all intermediate frames
         log_file.write('\nsteered md for {%d} - {%d} intermediate frames to be moved'%(frame_steered,interm_frames))
-        grompp_process = subprocess.Popen('{}{} -f {} -c {} -r {} -p {} -n {} -maxwarn 5 -o steered_md.tpr'.format(gromacs, gromppCommand, mdp_file, gro_steered, gro_steered, topology_file, index_file),shell=True)
+        grompp_process = subprocess.Popen('{}{} -f {} -c {} -r {} -p {} -n {} -maxwarn 5 -o steered_md{}.tpr'.format(gromacs, gromppCommand, mdp_file, gro_steered, gro_steered, topology_file, index_file, frame_steered),shell=True)
         grompp_process.wait()
-        mdrun_process = subprocess.Popen('{}{} -deffnm steered_md -plumed {} -ntomp 8'.format(gromacs, mdrunCommand, plumed_run_file),shell=True)
+        mdrun_process = subprocess.Popen('{}{} -deffnm steered_md{} -plumed {} -ntomp 8'.format(gromacs, mdrunCommand, frame_steered, plumed_run_file),shell=True)
         mdrun_process.wait()
         log_file.write('\n finished steered md for ' + str(frame_steered))
 
         # check to see if there is a frame satisfing the equidistance condition
-        plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed "+plumed_rmsd_file+" --mf_xtc steered_md.xtc" shell=True)
+        plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed "+plumed_rmsd_file+" --mf_xtc steered_md%d.xtc"%(frame_steered), shell=True)
         plumed_rmsd.wait()
         f=open(plumed_control_rmsd,"r")
         lines=f.readlines()[1:]
@@ -297,7 +297,7 @@ for a in range(0,len(list_frames)-2):
             new_str = BiKi.Structure()
             new_str.load(str(frame_steered)+".gro")
             trajLoader = BiKi.TrajectoryLoader(new_str)
-            trajLoader.addTrajectory("steered_md".xtc")
+            trajLoader.addTrajectory("steered_md"+str(frame_steered)+".xtc")
             str_eq = trajLoader.getFrame(frame_equidistant)
             str_eq.save(str(frame_steered)+"_"+str(interm_frames)+".gro")
             new_gro = BiKi.Structure()
@@ -334,16 +334,16 @@ for a in range(0,len(list_frames)-2):
             # the simulation is extended until the condition is satisfied
                 while (True):
                     log_file.write('\nextension of steered md for %s - %d intermediate frames to be moved'%(frame_steered,interm_frames))
-                    convert_process = subprocess.Popen('{}{} -s steered_md.tpr -extend 10 -o steered_md.tpr'.format(gromacs,convertCommand), shell=True)
+                    convert_process = subprocess.Popen('{}{} -s steered_md{}.tpr -extend 20 -o steered_md{}.tpr'.format(gromacs,convertCommand,frame_steered,frame_steered), shell=True)
                     convert_process.wait()
     
-                    mdrun_process = subprocess.Popen('{}{} -deffnm steered_md -cpi steered_md.cpt -plumed {} -ntomp 8'.format(gromacs, mdrunCommand, plumed_run_file),shell=True)
+                    mdrun_process = subprocess.Popen('{}{} -deffnm steered_md{} -cpi steered_md{}.cpt -plumed {} -ntomp 8'.format(gromacs, mdrunCommand, frame_steered, frame_steered, plumed_run_file),shell=True)
                     mdrun_process.wait()
     
                     log_file.write('\n finished steered md for ' + str(frame_steered))
 
                     # check to see if there is a frame satisfing the equidistance condition
-                    plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed %s --mf_xtc steered_md.xtc"%(plumed_rmsd_file), shell=True)
+                    plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed %s --mf_xtc steered_md%d.xtc"%(plumed_rmsd_file,frame_steered), shell=True)
                     plumed_rmsd.wait()
                     f=open(plumed_control_rmsd,"r")
                     lines=f.readlines()[1:]
@@ -362,7 +362,7 @@ for a in range(0,len(list_frames)-2):
                         new_str = BiKi.Structure()
                         new_str.load(str(frame_steered)+".gro")
                         trajLoader = BiKi.TrajectoryLoader(new_str)
-                        trajLoader.addTrajectory("steered_md".xtc")
+                        trajLoader.addTrajectory("steered_md"+str(frame_steered)+".xtc")
                         str_eq = trajLoader.getFrame(frame_equidistant)
                         str_eq.save(str(frame_steered)+"_"+str(interm_frames)+".gro")
                         new_gro = BiKi.Structure()
