@@ -277,7 +277,7 @@ for a in range(0,len(list_frames)-2):
         log_file.write('\n finished steered md for ' + str(frame_steered))
 
         # check to see if there is a frame satisfing the equidistance condition
-        plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed "+plumed_rmsd_file+" --mf_xtc steered_md.xtc" shell=True)
+        plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed "+plumed_rmsd_file+" --mf_xtc steered_md.xtc", shell=True)
         plumed_rmsd.wait()
         f=open(plumed_control_rmsd,"r")
         lines=f.readlines()[1:]
@@ -297,7 +297,7 @@ for a in range(0,len(list_frames)-2):
             new_str = BiKi.Structure()
             new_str.load(str(frame_steered)+".gro")
             trajLoader = BiKi.TrajectoryLoader(new_str)
-            trajLoader.addTrajectory("steered_md".xtc")
+            trajLoader.addTrajectory("steered_md.xtc")
             str_eq = trajLoader.getFrame(frame_equidistant)
             str_eq.save(str(frame_steered)+"_"+str(interm_frames)+".gro")
             new_gro = BiKi.Structure()
@@ -362,7 +362,7 @@ for a in range(0,len(list_frames)-2):
                         new_str = BiKi.Structure()
                         new_str.load(str(frame_steered)+".gro")
                         trajLoader = BiKi.TrajectoryLoader(new_str)
-                        trajLoader.addTrajectory("steered_md".xtc")
+                        trajLoader.addTrajectory("steered_md.xtc")
                         str_eq = trajLoader.getFrame(frame_equidistant)
                         str_eq.save(str(frame_steered)+"_"+str(interm_frames)+".gro")
                         new_gro = BiKi.Structure()
