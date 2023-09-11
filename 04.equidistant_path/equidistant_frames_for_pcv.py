@@ -123,19 +123,20 @@ def get_rmsd():
 
 
 ####### Plumed template input file #######
-def write_plumed_template_input(entity0, KAPPA_rmsd1, KAPPA_rmsd2):
-    with open(plumed_template_file, 'w') as filout:
-        filout.write('''WHOLEMOLECULES ENTITY0={}
-rmsd_1: RMSD REFERENCE=ref_pre TYPE=OPTIMAL
-rmsd_2: RMSD REFERENCE=ref_next TYPE=OPTIMAL
-MOVINGRESTRAINT ...
-        ARG=rmsd_1,rmsd_2
-        STEP0=0         AT0=rmsd1,rmsd2     KAPPA0=100.00,100.00
-        STEP1=half_s    AT1=0.1000,rmsd2    KAPPA1={},{}
-        STEP2=step      AT2=0.0990,rmsd2    KAPPA2={},{}
-        STEP3=step_t    AT3=0.0990,rmsd2    KAPPA3={},{}
-... MOVINGRESTRAINT
-PRINT ARG=rmsd_1,rmsd_2 FILE=colvar STRIDE=50 FMT=%8.4f'''.format(entity0, KAPPA_rmsd1,KAPPA_rmsd2,KAPPA_rmsd1,KAPPA_rmsd2/2,KAPPA_rmsd1,KAPPA_rmsd2/5))
+#def write_plumed_template_input(KAPPA_rmsd1, KAPPA_rmsd2):
+#    with open(plumed_template_file, 'w') as filout:
+#        filout.write('''WHOLEMOLECULES ENTITY0=entity0
+#rmsd_1: RMSD REFERENCE=ref_previous TYPE=OPTIMAL NOPBC
+#rmsd_2: RMSD REFERENCE=ref_next TYPE=OPTIMAL NOPBC
+#MOVINGRESTRAINT ...
+#        ARG=rmsd_1,rmsd_2
+##        STEP0=0         AT0=rmsd1,rmsd2     KAPPA0=100.00,100.00
+ #       STEP1=half_s    AT1=0.1000,rmsd2    KAPPA1=%d,%d
+#        STEP2=step      AT2=0.0990,rmsd2    KAPPA2=%d,%d
+#        STEP3=step_t    AT3=0.0990,rmsd2    KAPPA3=%d,%d
+#... MOVINGRESTRAINT
+#PRINT ARG=rmsd_1,rmsd_2 FILE=colvar STRIDE=500 FMT=%8.4f'''%(KAPPA_rmsd1,KAPPA_rmsd2,KAPPA_rmsd1,KAPPA_rmsd2/2,KAPPA_rmsd1,KAPPA_rmsd2/5))
+
 
 ####### Plumed run input file #######
 def write_plumed_input(steps_md, ref_pre, ref_next, rmsd_1, rmsd_2):
@@ -204,10 +205,10 @@ path.addStructure(str_first_frame)
 
 # str_steered: structure to be moved during steered md
 # str_pre: previous structure (ref to compute rmsd_1)
-# str_next: following structure (ref to compute rmsd_2)
+# str_next: following structure (ref to compute rmsd_2) 
 
 frame_pre = list_frames[0]
-for a in range(0,len(list_frames)-2):
+for a in range(0,len(list_frames)-2):    
     # define structure to move and refs
     frame_steered = list_frames[a+1]
     frame_next = list_frames[a+2]
@@ -257,7 +258,7 @@ for a in range(0,len(list_frames)-2):
         log_file.flush()
 
     
-    # estimee of intermediate frames, thus md steps for steered md
+    # estimee of intermediate frames, thus md steps for steered md 
     interm_frames = int(rmsd1/equidistance_nm)
     log_file.write('\nexpected number of intermediate frames %d'%(interm_frames))
 
@@ -277,7 +278,7 @@ for a in range(0,len(list_frames)-2):
         log_file.write('\n finished steered md for ' + str(frame_steered))
 
         # check to see if there is a frame satisfing the equidistance condition
-        plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed "+plumed_rmsd_file+" --mf_xtc steered_md%d.xtc"%(frame_steered), shell=True)
+        plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed "+plumed_rmsd_file+" --mf_xtc steered_md%d.xtc"%(frame_steered), shell=True)   
         plumed_rmsd.wait()
         f=open(plumed_control_rmsd,"r")
         lines=f.readlines()[1:]
@@ -331,10 +332,10 @@ for a in range(0,len(list_frames)-2):
         # if condition is NOT satisfied by a frame:
         else:
 
-            # the simulation is extended until the condition is satisfied
+            # the simulation is extended until the condition is satisfied          
                 while (True):
                     log_file.write('\nextension of steered md for %s - %d intermediate frames to be moved'%(frame_steered,interm_frames))
-                    convert_process = subprocess.Popen('{}{} -s steered_md{}.tpr -extend 20 -o steered_md{}.tpr'.format(gromacs,convertCommand,frame_steered,frame_steered), shell=True)
+                    convert_process = subprocess.Popen('{}{} -s steered_md{}.tpr -extend 20 -o steered_md{}.tpr'.format(gromacs,convertCommand,frame_steered,frame_steered), shell=True)     
                     convert_process.wait()
     
                     mdrun_process = subprocess.Popen('{}{} -deffnm steered_md{} -cpi steered_md{}.cpt -plumed {} -ntomp 8'.format(gromacs, mdrunCommand, frame_steered, frame_steered, plumed_run_file),shell=True)
