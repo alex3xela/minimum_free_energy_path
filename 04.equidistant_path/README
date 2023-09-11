@@ -1,0 +1,44 @@
+README equidistant_frames_for_path_cv
+
+What it does:
+The program equidistant_frames_for_pcv applies the equidistant waypoint algorithm.
+It uses a steered MD protocol to optimize the distance (in terms of RMSD) between consecutive frames.
+As a result, an approximate minimum free energy path composed by equidistant frames is obtained, allowing the smooth progression of the path CVs along the path. 
+
+INPUTS:
+
+  1. GRO files extracted from the original trajectory in 03.extract
+     (you can copy the GRO files in this directory using: "bash copy_gro_files.sh")
+
+  2. input.ini (fill input file with your parameters as explained)
+
+  3. Modify steered_md_template.mdp as needed
+
+
+OUTPUT: 
+  
+  1. path_reference.pdb: multimodel pdb file describing the uniform path of the ligand.
+      It is ready to be used for successive enhanched sampling methods with PCVs.
+        - CA of protein residues are associated to occupancy equal to 1.00
+        - ligand atoms are associated to beta equal to 1.00   
+        - the selection of atoms of all frames optimized with steered MD are written in path_reference.pdb
+
+  2. GRO files of each frame optimised
+
+  3. equidistant_frames.log: lof file where all steps are written to follow the evolution of the program
+ 
+
+Optional to improve the sampling of the path during successive simulations:
+Add a cap at the beginning and at the end of the path by interpolating the first 2 and last 2 configurations of the original path 
+EX. extreme_path.tcl
+
+[Paths]
+In this section, define your paths for gromacs and plumed that will be used to make the frames equidistant
+If not in this directory, remember to specoify the full paths of your topology and index files needed for the MD run
+
+[Script Paramters]
+equidistance_nm = equidistance between consecutive frames in nm (normally, 0.1 nm = 1 Angstrom)
+
+[Plumed Parameters]
+Two different CVs are used: RMSD with respect to the previous station, RMSD with respect to the next station (explain why)
+The KAPPA for the steered MD must be defined for each CV (the one related to RMSD with respect to the previous station should be x10-100 times higher)

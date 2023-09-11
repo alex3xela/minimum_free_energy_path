@@ -1,0 +1,13 @@
+You have to use main_linear_input.m with Matlab.
+
+Input: ligandMatrix.txt 
+
+To generate the initial path, we need to define:
+  - NC		       number of initial clusters
+  - newNC 	       number of final clusters
+  - smoothing factor   
+  - boundaries_id
+
+Output: physical_medoids.txt
+
+NB: clean the doubles of physical_medoids.txt using remove_duplicates.sh

@@ -1,0 +1,20 @@
+# traj_to_ligand_matrix.py
+
+The program writes a matrix that describes the trajectory of the ligand in the phase space starting from the initial trajectory.
+This initial trajectory (describing the unbinding event) is aligned and centered with respect to the protein backbone. All frames of the trajectory are aligned with respect to the reference frame. After this alignment, the matrix describing the trajectory of the ligand is constructed. 
+
+To run it:
+
+   python traj_to_ligand_matrix.py --traj traj_file.xtc --ref ref_file.pdb --lig AAA --pro backbone
+
+For additional info:
+
+   python traj_to_ligand_matrix.py --help
+
+
+N.B. Initial trajectory: starting guess path obtained from an enhanched sampling method (trajectory without pbc artifacts and water molecule correctly wrapped).
+It is recommended to use a cubic box for simulations of the initial guess path.
+
+
+Output:
+   ligandMatrix.txt -- matrix containing ligand coordinates where each row represents a specific point in the phase space (rows = coordinates of ligand's atoms; columns = time).

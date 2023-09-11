@@ -1,0 +1,10 @@
+Extract the physical frames from the cut trajectory with EXTRACT_physical_medoids 
+NB. Modify EXTRACT_physical_medoids with the required files from Gromacs
+
+source BiKi
+python EXTRACT_physical_medoids
+
+After having extracted the frames in physical_medoids.txt, create a multipdb (path_initial.pdb) using gromacs:
+  - trjcat -f first.gro ... last.gro -o path_initial.xrx -settime 
+Here start from zero
+  - trjconv -f path_initial.xtc -o path_initial.pdb -s .gro 
