@@ -234,7 +234,7 @@ for a in range(0,len(list_frames)-2):
     plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed %s --igro %s "%(plumed_rmsd_file,gro_steered), shell=True)
     plumed_rmsd.wait()
     rmsd1, rmsd2 = get_rmsd()
-    log_file.write('\n\nstarting iteration %d'%(a))
+    log_file.write('\n\nstarting iteration to move %d'%(frame_steered))
     log_file.write('\nrmsd1:{%f} - between {%s} and previous reference {%s} \nrmsd2:{%f} - between {%s} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
     log_file.flush()
 
@@ -253,7 +253,7 @@ for a in range(0,len(list_frames)-2):
         plumed_rmsd.wait()
         rmsd1, rmsd2 = get_rmsd()
         log_file.write('\nrmsd1<=equidistance_nm')
-        log_file.write('\n\nstarting iteration %d'%(a))
+        log_file.write('\n\nstarting iteration to move %d'%(frame_steered))
         log_file.write('\nrmsd1:{%f} - between {%d} and previous reference {%s} \nrmsd2:{%f} - between {%d} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
         log_file.flush()
 
@@ -336,7 +336,7 @@ for a in range(0,len(list_frames)-2):
 
             #update of new intermediate frames
             interm_frames= interm_frames-1
-            log_file.write('\n\nstarting iteration %d_%d'%(a,interm_frames))
+            log_file.write('\n\nstarting iteration to move %d_%d'%(frame_steered, interm_frames))
 
             # steered md steps to perform (20 ps for intermediate frame) and inputs
             steps_md = interm_frames*10000
@@ -344,7 +344,6 @@ for a in range(0,len(list_frames)-2):
             write_plumed_input(steps_md, ref_pre, ref_next, rmsd1, rmsd2)
 
             # restart with new previous reference
-            log_file.write('\nrmsd1:{%f} - between {%s} and previous reference {%s} \nrmsd2:{%f} - between {%s} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
             subprocess.call("rm bc* \#*", shell=True)
             log_file.flush()
         
@@ -401,7 +400,7 @@ for a in range(0,len(list_frames)-2):
 
                         #update of new intermediate frames
                         interm_frames=interm_frames-1
-                        log_file.write('\n\nstarting iteration %d_%d'%(a,interm_frames))
+                        log_file.write('\n\nstarting iteration %d_%d'%(frame_steered,interm_frames))
 
                         # steered md steps to perform (20 ps for intermediate frame) and inputs
                         steps_md = interm_frames*10000
@@ -410,8 +409,7 @@ for a in range(0,len(list_frames)-2):
 
                         # restart with new previous reference
                         subprocess.call("rm bc* \#*", shell=True)
-                        log_file.write('\nrmsd1:{%f} - between {%s} and previous reference {%s} \nrmsd2:{%f} - between {%s} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
-                        log_file.flush()
+                        #log_file.write('\nrmsd1:{%f} - between {%s} and previous reference {%s} \nrmsd2:{%f} - between {%s} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
                         break
 
     interm_frames= 1
