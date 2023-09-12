@@ -275,7 +275,7 @@ while frame_steered < len(list_frames)-1:
             plumed_rmsd.wait()
             rmsd1, rmsd2 = get_rmsd()
             log_file.write('\nrmsd1<=equidistance_nm')
-            log_file.write('\n\nstarting iteration %d'%(a))
+            log_file.write('\n\nstarting iteration to move %d'%(frame_steered))
             log_file.write('\nrmsd1:{%f} - between {%d} and previous reference {%s} \nrmsd2:{%f} - between {%d} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
             log_file.flush()
 
