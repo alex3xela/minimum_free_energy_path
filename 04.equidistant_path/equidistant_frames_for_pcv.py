@@ -314,7 +314,7 @@ while frame_steered < len(list_frames)-1:
         if (np.abs(rmsdmin - equidistance_nm) < tollerance_nm):
             
             # the frame is added to the path
-            log_file.write('\nframe %d of %s in steered md satisfies equidistant condition'%(interm_frames,frame_steered))
+            log_file.write('\n structure %s_%d after steered md satisfies equidistant condition'%(frame_steered,interm_frames))
             log_file.write('\n adding structure %s_%d to path'%(frame_steered,interm_frames))
             frame_equidistant = rmsd1_list.index(nearest(rmsd1_list, equidistance_nm))
             new_str = BiKi.Structure()
@@ -339,14 +339,12 @@ while frame_steered < len(list_frames)-1:
 
             #update of new intermediate frames
             interm_frames -= 1
-            log_file.write('\n\nstarting iteration to move %d_%d'%(frame_steered, interm_frames))
 
             # steered md steps to perform (20 ps for intermediate frame) and inputs
             steps_md = interm_frames*10000
             write_gromacs_input(steps_md)
             write_plumed_input(steps_md, ref_pre, ref_next, rmsd1, rmsd2)
 
-            # restart with new previous reference
             subprocess.call("rm bc* \#*", shell=True)
             log_file.flush()
         
@@ -378,7 +376,7 @@ while frame_steered < len(list_frames)-1:
                     # if condition is satisfied by a frame:
                     if (np.abs(rmsdmin - equidistance_nm) <= tollerance_nm):
                         # the frame is added to the path
-                        log_file.write('\nframe %d of %s in steered md satisfies equidistant condition'%(interm_frames,frame_steered))
+                        log_file.write('\n structure %s_%d after steered md satisfies equidistant condition'%(frame_steered,interm_frames))
                         log_file.write('\n adding structure %s_%d to path'%(frame_steered,interm_frames))
                         frame_equidistant = rmsd1_list.index(nearest(rmsd1_list, equidistance_nm))
                         new_str = BiKi.Structure()
@@ -403,7 +401,7 @@ while frame_steered < len(list_frames)-1:
 
                         #update of new intermediate frames
                         interm_frames -= 1
-                        log_file.write('\n\nstarting iteration %d_%d'%(frame_steered,interm_frames))
+                        #log_file.write('\n\nstarting iteration %d_%d'%(frame_steered,interm_frames))
 
                         # steered md steps to perform (20 ps for intermediate frame) and inputs
                         steps_md = interm_frames*10000
