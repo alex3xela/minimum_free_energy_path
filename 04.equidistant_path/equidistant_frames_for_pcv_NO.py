@@ -240,7 +240,7 @@ for a in range(0,len(list_frames)-2):
 
     if rmsd1 < equidistance_nm:
         frame_steered = frame_next
-        frame_next = list_frames[a+3]
+        frame_next = frame_steered+1
         str_next = BiKi.Structure()
         str_next.load(str(frame_next)+".gro")
         str_ref = reference(str_next)
@@ -259,7 +259,7 @@ for a in range(0,len(list_frames)-2):
 
         if rmsd1 < equidistance_nm:
             frame_steered = frame_next
-            frame_next = list_frames[a+4]
+            frame_next = frame_steered+1
             str_next = BiKi.Structure()
             str_next.load(str(frame_next)+".gro")
             str_ref = reference(str_next)
