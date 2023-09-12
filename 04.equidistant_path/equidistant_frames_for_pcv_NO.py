@@ -256,6 +256,25 @@ for a in range(0,len(list_frames)-2):
         log_file.write('\nrmsd1:{%f} - between {%d} and previous reference {%s} \nrmsd2:{%f} - between {%d} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
         log_file.flush()
 
+        if rmsd1 < equidistance_nm:
+            frame_steered = frame_next
+            frame_next = list_frames[a+4]
+            str_next = BiKi.Structure()
+            str_next.load(str(frame_next)+".gro")
+            str_ref = reference(str_next)
+            str_ref.save(str(frame_next)+"_ref.pdb")
+    
+            gro_steered = "{}.gro".format(frame_steered)
+            ref_next= "{}_ref.pdb".format(frame_next)
+            write_plumed_rmsd(ref_pre, ref_next)
+            plumed_rmsd = subprocess.Popen(plumed + "plumed driver --plumed %s --igro %s "%(plumed_rmsd_file,gro_steered), shell=True)
+            plumed_rmsd.wait()
+            rmsd1, rmsd2 = get_rmsd()
+            log_file.write('\nrmsd1<=equidistance_nm')
+            log_file.write('\n\nstarting iteration %d'%(a))
+            log_file.write('\nrmsd1:{%f} - between {%d} and previous reference {%s} \nrmsd2:{%f} - between {%d} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
+            log_file.flush()
+
     
     # estimee of intermediate frames, thus md steps for steered md 
     interm_frames = int(rmsd1/equidistance_nm)
