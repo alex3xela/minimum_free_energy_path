@@ -210,7 +210,7 @@ frame_pre = list_frames[0]
 frame_steered = frame_pre
 
 # equispaced is repeated until frame_steered of previous replica is lower than list_frames-1, i.e., last frame to steered
-while frame_steered < len(list_frames)-1):    
+while frame_steered < len(list_frames)-1:    
     # define structure to move and refs
     frame_steered = frame_steered+1
     frame_next = frame_steered+1
