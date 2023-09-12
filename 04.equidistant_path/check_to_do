@@ -1,0 +1,10 @@
+check that you need
+
+            #update of new intermediate frames
+            interm_frames -= 1
+
+this:
+            # steered md steps to perform (20 ps for intermediate frame) and inputs
+            steps_md = interm_frames*10000
+            write_gromacs_input(steps_md)
+            write_plumed_input(steps_md, ref_pre, ref_next, rmsd1, rmsd2)
