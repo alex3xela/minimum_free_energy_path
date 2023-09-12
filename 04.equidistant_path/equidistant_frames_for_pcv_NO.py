@@ -255,6 +255,7 @@ for a in range(0,len(list_frames)-2):
         log_file.write('\n\nstarting iteration %d'%(a))
         log_file.write('\nrmsd1:{%f} - between {%d} and previous reference {%s} \nrmsd2:{%f} - between {%d} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
         log_file.flush()
+        a += 1
 
         if rmsd1 < equidistance_nm:
             frame_steered = frame_next
@@ -274,6 +275,7 @@ for a in range(0,len(list_frames)-2):
             log_file.write('\n\nstarting iteration %d'%(a))
             log_file.write('\nrmsd1:{%f} - between {%d} and previous reference {%s} \nrmsd2:{%f} - between {%d} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
             log_file.flush()
+            a += 1
 
     
     # estimee of intermediate frames, thus md steps for steered md 
