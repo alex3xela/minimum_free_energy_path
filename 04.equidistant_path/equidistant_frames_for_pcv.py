@@ -208,7 +208,9 @@ path.addStructure(str_first_frame)
 
 frame_pre = list_frames[0]
 frame_steered = frame_pre
-for a in range(0,len(list_frames)-2):    
+
+# equispaced is repeated until frame_steered of previous replica is lower than list_frames-1, i.e., last frame to steered
+while frame_steered < len(list_frames)-1):    
     # define structure to move and refs
     frame_steered = frame_steered+1
     frame_next = frame_steered+1
@@ -335,7 +337,7 @@ for a in range(0,len(list_frames)-2):
             rmsd1, rmsd2 = get_rmsd()
 
             #update of new intermediate frames
-            interm_frames= interm_frames-1
+            interm_frames -= 1
             log_file.write('\n\nstarting iteration to move %d_%d'%(frame_steered, interm_frames))
 
             # steered md steps to perform (20 ps for intermediate frame) and inputs
@@ -399,7 +401,7 @@ for a in range(0,len(list_frames)-2):
                         rmsd1, rmsd2 = get_rmsd()
 
                         #update of new intermediate frames
-                        interm_frames=interm_frames-1
+                        interm_frames -= 1
                         log_file.write('\n\nstarting iteration %d_%d'%(frame_steered,interm_frames))
 
                         # steered md steps to perform (20 ps for intermediate frame) and inputs
@@ -412,7 +414,7 @@ for a in range(0,len(list_frames)-2):
                         #log_file.write('\nrmsd1:{%f} - between {%s} and previous reference {%s} \nrmsd2:{%f} - between {%s} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
                         break
 
-    interm_frames= 1
+    interm_frames = 1
     frame_pre = str(frame_steered)+"_"+str(interm_frames)
 
 # save the final path as pdb
