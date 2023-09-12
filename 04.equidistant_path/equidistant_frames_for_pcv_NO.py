@@ -207,10 +207,11 @@ path.addStructure(str_first_frame)
 # str_next: following structure (ref to compute rmsd_2) 
 
 frame_pre = list_frames[0]
+frame_steered = frame_pre
 for a in range(0,len(list_frames)-2):    
     # define structure to move and refs
-    frame_steered = list_frames[a+1]
-    frame_next = list_frames[a+2]
+    frame_steered = frame_steered+1
+    frame_next = frame_steered+1
     
     # create files for structure and refs
     str_pre = BiKi.Structure()
@@ -255,7 +256,6 @@ for a in range(0,len(list_frames)-2):
         log_file.write('\n\nstarting iteration %d'%(a))
         log_file.write('\nrmsd1:{%f} - between {%d} and previous reference {%s} \nrmsd2:{%f} - between {%d} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
         log_file.flush()
-        a += 1
 
         if rmsd1 < equidistance_nm:
             frame_steered = frame_next
@@ -275,7 +275,6 @@ for a in range(0,len(list_frames)-2):
             log_file.write('\n\nstarting iteration %d'%(a))
             log_file.write('\nrmsd1:{%f} - between {%d} and previous reference {%s} \nrmsd2:{%f} - between {%d} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
             log_file.flush()
-            a += 1
 
     
     # estimee of intermediate frames, thus md steps for steered md 
