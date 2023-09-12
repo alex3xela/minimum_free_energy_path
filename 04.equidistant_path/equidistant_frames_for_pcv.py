@@ -209,7 +209,8 @@ path.addStructure(str_first_frame)
 frame_pre = list_frames[0]
 frame_steered = frame_pre
 
-# equispaced is repeated until frame_steered of previous replica is lower than list_frames-1, i.e., last frame to steered
+# equispacing is repeated until frame_steered of previous replica is lower than list_frames-1
+# i.e., until new frame to steered is lower than list_frames
 while frame_steered < len(list_frames)-1:    
     # define structure to move and refs
     frame_steered = frame_steered+1
