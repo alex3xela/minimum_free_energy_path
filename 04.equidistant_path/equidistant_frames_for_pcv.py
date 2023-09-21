@@ -166,7 +166,7 @@ def nearest(items, pivot):
 
 ########## select alignment and rmsd ######## 
 def reference(stru):
-    stru.select(selection_align).setAllOccupancies(1.0)
+    stru.select(selection_align).setAllOccupancies(1.0).setAllBetas(1.0)
     stru.select(selection_rmsd).setAllBetas(1.0)
     return stru.select(sel_tot)
 
