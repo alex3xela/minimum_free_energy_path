@@ -241,7 +241,7 @@ while frame_steered < len(list_frames)-1:
     log_file.write('\nrmsd1:{%f} - between {%s} and previous reference {%s} \nrmsd2:{%f} - between {%s} and next reference {%s}'%(rmsd1,frame_steered,ref_pre,rmsd2,frame_steered,ref_next))
     log_file.flush()
 
-    while rmsd1 < equidistance_nm:
+    while (np.abs(rmsd1 - equidistance_nm) > tollerance_nm):
         frame_steered = frame_next
         frame_next = frame_steered+1
         str_next = BiKi.Structure()
