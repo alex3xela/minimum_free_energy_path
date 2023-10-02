@@ -135,7 +135,7 @@ MOVINGRESTRAINT ...
         STEP2=step      AT2={},rmsd2    KAPPA2={},{}
         STEP3=step_t    AT3={},rmsd2    KAPPA3={},{}
 ... MOVINGRESTRAINT
-PRINT ARG=rmsd_1,rmsd_2 FILE=colvar STRIDE=10 FMT=%8.4f'''.format(entity0, equidistance_nm, (equidistance_nm/tollerance_nm), (equidistance_nm/tollerance_nm), KAPPA_rmsd1,KAPPA_rmsd2,KAPPA_rmsd1,float(KAPPA_rmsd2)/2,KAPPA_rmsd1,float(KAPPA_rmsd2)/5))
+PRINT ARG=rmsd_1,rmsd_2 FILE=colvar STRIDE=10 FMT=%8.4f'''.format(entity0, equidistance_nm, (equidistance_nm-tollerance_nm), (equidistance_nm-tollerance_nm), KAPPA_rmsd1,KAPPA_rmsd2,KAPPA_rmsd1,float(KAPPA_rmsd2)/2,KAPPA_rmsd1,float(KAPPA_rmsd2)/5))
 
 ####### Plumed run input file #######
 def write_plumed_input(steps_md, ref_pre, ref_next, rmsd_1, rmsd_2):
